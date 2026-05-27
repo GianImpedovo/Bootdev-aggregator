@@ -34,6 +34,7 @@ func main() {
 	clicmd.register("reset", handlerReset)
 	clicmd.register("users", handlerGetUsers)
 	clicmd.register("agg", handlerAgg)
+	clicmd.register("addfeed", handlerAddfeed)
 
 	arguments := os.Args
 
@@ -49,7 +50,7 @@ func main() {
 
 	err = clicmd.run(&s, cmd)
 	if err != nil {
-		fmt.Println("Error en usuario no reconocido")
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
