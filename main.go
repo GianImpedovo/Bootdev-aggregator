@@ -35,6 +35,7 @@ func main() {
 	clicmd.register("users", handlerGetUsers)
 	clicmd.register("agg", handlerAgg)
 	clicmd.register("addfeed", handlerAddfeed)
+	clicmd.register("feeds", handlerGetFeeds)
 
 	arguments := os.Args
 
