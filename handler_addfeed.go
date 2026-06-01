@@ -16,8 +16,6 @@ func handlerAddfeed(s *state, cmd command) error {
 		return errors.New("Forgot the name or the url of the feed")
 	}
 
-	fmt.Println(s.config.CurrentUserName)
-
 	userId, err := s.db.GetUser(context.Background(), s.config.CurrentUserName)
 	if err != nil {
 		return err
@@ -37,6 +35,18 @@ func handlerAddfeed(s *state, cmd command) error {
 	}
 
 	fmt.Printf("%+v\n", feed)
+
+	_, err = s.db.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		UserID:    userId.ID,
+		FeedID:    feed.ID,
+	})
+
+	if err != nil {
+		return errors.New("Can't create feed follow when creating the feed")
+	}
 
 	return nil
 }

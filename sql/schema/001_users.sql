@@ -11,3 +11,4 @@ DROP TABLE users;
 
 -- example:
 -- goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
+-- goose postgres "postgres://postgres:postgres@localhost:5432/gator" down
