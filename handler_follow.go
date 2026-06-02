@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 
 	if len(cmd.arguments) == 0 {
 		return errors.New("Insert a url to follow")
@@ -20,10 +20,6 @@ func handlerFollow(s *state, cmd command) error {
 	feed, err := s.db.GetFeedByURL(context.Background(), argURL)
 	if err != nil {
 		return errors.New("No feed")
-	}
-	user, err := s.db.GetUser(context.Background(), s.config.CurrentUserName)
-	if err != nil {
-		return errors.New("No user")
 	}
 
 	feedFollowCreated, err := s.db.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{

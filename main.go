@@ -34,10 +34,11 @@ func main() {
 	clicmd.register("reset", handlerReset)
 	clicmd.register("users", handlerGetUsers)
 	clicmd.register("agg", handlerAgg)
-	clicmd.register("addfeed", handlerAddfeed)
+	clicmd.register("addfeed", middlewareLoggedIn(handlerAddfeed))
 	clicmd.register("feeds", handlerGetFeeds)
-	clicmd.register("follow", handlerFollow)
-	clicmd.register("following", handlerFollowing)
+	clicmd.register("follow", middlewareLoggedIn(handlerFollow))
+	clicmd.register("following", middlewareLoggedIn(handlerFollowing))
+	clicmd.register("unfollow", middlewareLoggedIn(handlerUnfollowing))
 
 	arguments := os.Args
 

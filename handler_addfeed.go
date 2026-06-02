@@ -10,15 +10,10 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerAddfeed(s *state, cmd command) error {
+func handlerAddfeed(s *state, cmd command, user database.User) error {
 
 	if len(cmd.arguments) < 2 {
 		return errors.New("Forgot the name or the url of the feed")
-	}
-
-	userId, err := s.db.GetUser(context.Background(), s.config.CurrentUserName)
-	if err != nil {
-		return err
 	}
 
 	feed, err := s.db.CreateFeed(context.Background(), database.CreateFeedParams{
@@ -27,7 +22,7 @@ func handlerAddfeed(s *state, cmd command) error {
 		UpdatedAt: time.Now().UTC(),
 		Name:      cmd.arguments[0],
 		Url:       cmd.arguments[1],
-		UserID:    userId.ID,
+		UserID:    user.ID,
 	})
 
 	if err != nil {
@@ -40,7 +35,7 @@ func handlerAddfeed(s *state, cmd command) error {
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		UserID:    userId.ID,
+		UserID:    user.ID,
 		FeedID:    feed.ID,
 	})
 
