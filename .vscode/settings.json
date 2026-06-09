@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "go.formatTool": "gofmt"
+}
