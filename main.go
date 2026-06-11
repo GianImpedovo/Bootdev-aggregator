@@ -39,6 +39,7 @@ func main() {
 	clicmd.register("follow", middlewareLoggedIn(handlerFollow))
 	clicmd.register("following", middlewareLoggedIn(handlerFollowing))
 	clicmd.register("unfollow", middlewareLoggedIn(handlerUnfollowing))
+	clicmd.register("browse", middlewareLoggedIn(handlerBrowse))
 
 	arguments := os.Args
 
