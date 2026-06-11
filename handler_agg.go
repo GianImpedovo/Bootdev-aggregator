@@ -4,7 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
+
+	"github.com/GianImpedovo/aggregator/internal/database"
+	"github.com/google/uuid"
 )
 
 func handlerAgg(s *state, cmd command) error {
@@ -48,7 +52,33 @@ func scrapeFeeds(s *state) error {
 	}
 
 	for _, v := range rssFeed.Channel.Item {
-		fmt.Printf("%s\n", v.Title)
+		actualTime, err := time.Parse(time.RFC1123Z, v.PubDate)
+		if err != nil {
+			return err
+		}
+
+		_, err = s.db.CreatePost(context.Background(), database.CreatePostParams{
+			ID:          uuid.New(),
+			CreatedAt:   time.Now().UTC(),
+			UpdatedAt:   time.Now().UTC(),
+			Title:       v.Title,
+			Url:         v.Link,
+			Description: v.Description,
+			PublishedAt: actualTime,
+			FeedID:      feed.ID,
+		})
+
+		if err != nil {
+			// Si el error es simplemente porque el post ya existe, lo ignoramos silenciosamente
+			if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "unique constraint") {
+				continue
+			}
+			// Si es cualquier otro error, lo reportamos en la consola para saber qué falló
+			fmt.Printf("Error al crear el post: %v\n", err)
+			continue
+		}
+
+		// fmt.Printf("%s\n", v.Title)
 	}
 
 	return nil
